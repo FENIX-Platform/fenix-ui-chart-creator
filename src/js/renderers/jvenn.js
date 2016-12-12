@@ -11,9 +11,10 @@ define([
     '../../config/config',
     'fenix-ui-pivotator',
     '../../config/renderers/jvenn',
+    'canvas2svg',
     'jvenn',
     'amplify-pubsub'
-], function ($, _, log, ERR, EVT, C, Pivotator, templates) {
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, canvas2svg, jvenn) {
 
     'use strict';
 
