@@ -121,6 +121,7 @@ define([
         this.renderer = param.renderer || C.renderer;
         this.lang = param.lang || 'EN';
         this.config = param.config;
+        this.id = param.id;
         if (typeof param.createConfiguration === 'function') {
             this.createConfiguration = param.createConfiguration;
         }
@@ -197,8 +198,10 @@ define([
             model: model,
             lang: this.lang,
             type: this.type,
+            id: this.id,
             config: this.config,
-            createConfiguration: this.createConfiguration
+            createConfiguration: this.createConfiguration,
+            controller: this
         });
 
         this.chart = new Renderer(config);
@@ -216,7 +219,7 @@ define([
     //disposition
 
     Chart.prototype._unbindEventListeners = function () {
-        //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
+         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
     };
 
     Chart.prototype.dispose = function () {

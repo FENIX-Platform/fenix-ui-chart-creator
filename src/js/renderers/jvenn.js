@@ -82,46 +82,54 @@ define([
     JVenn.prototype._renderJVenn = function (config) {
         var model = this.model;
 
+
         if (!config) {
             alert("Impossible to find chart configuration: " + this.type);
         }
 
-        var config = $.extend(true, this._populateData(model, templates), config);
-        this.chart = this.el.jvenn(config);
+        this.baseConfig = $.extend(true, this._populateData(model, templates), this.config);
+
+        this.chart = this.el.jvenn(this.baseConfig);
 
         this._trigger("ready");
 
     };
 
+
     JVenn.prototype._populateData = function (model, config) {
+
+        // reset series
+        config.series = []
 
         for (var ii in model.cols) {
             if (model.cols.hasOwnProperty(ii)) {
                 var i = model.cols[ii];
 
-
-               // console.log(i.title[this.lang]);
                 config.xAxis.categories.push(i.title[this.lang]);
-
             }
         }
 
-        var dataArray = [];
-
         for (var k in model.rows) {
                 var data = model.data[k];
-
                 var processedArry = [];
+                var processedCodeList = [];
+
                 for(var x in data){
                      if(data[x] != null) {
+                        var codeObj = {};
+                         codeObj.id = model.cols[x].id;
+                         codeObj.title = data[x];
                          processedArry.push(data[x]);
-                     }
+                         processedCodeList.push(codeObj);
+                    }
                  }
 
             config.series.push({
                 name: model.rows[k].join(" "),
-                data: processedArry
+                data: processedArry,
+                codelist: processedCodeList
             });
+
         }
 
         return config;
@@ -164,7 +172,24 @@ define([
 
     JVenn.prototype._bindEventListeners = function () {
 
-        //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
+        var self = this;
+
+        this.config.fnClickCallback = function() {
+
+            var obj = {
+             list: this.list,
+             listnames: this.listnames,
+             series:  self.baseConfig.series,
+             selected: this,
+             id:   self.id
+            };
+
+           // console.log(obj)
+            self.controller._trigger('click', obj);
+
+            //amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
+
+          };
 
     };
 
