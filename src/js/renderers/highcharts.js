@@ -22,7 +22,7 @@ define([
 
     'use strict';
 
-    function HC(o) {
+    function Highcharts(o) {
         log.info("FENIX Highcharts");
         log.info(o);
 
@@ -55,7 +55,7 @@ define([
      * pub/sub
      * @return {Object} component instance
      */
-    HC.prototype.on = function (channel, fn, context) {
+    Highcharts.prototype.on = function (channel, fn, context) {
         var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
@@ -68,7 +68,7 @@ define([
      * Force redrawing
      * @return {Object} filter instance
      */
-    HC.prototype.redraw = function () {
+    Highcharts.prototype.redraw = function () {
 
         if (this.chart.length > 0) {
             this.chart.highcharts().reflow();
@@ -78,7 +78,7 @@ define([
 
     };
 
-    HC.prototype.update = function (config) {
+    Highcharts.prototype.update = function (config) {
 
         //TODO add validation
         this.type = config.type ? config.type : this.type;
@@ -86,7 +86,7 @@ define([
         this._renderHighcharts(config);
     };
 
-    HC.prototype._renderHighcharts = function (config) {
+    Highcharts.prototype._renderHighcharts = function (config) {
         var model = this.model;
 
         var chartConfig = templates[this.type];
@@ -94,8 +94,6 @@ define([
         if (!config) {
             alert("Impossible to find chart configuration: " + this.type);
         }
-
-
 
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
@@ -107,10 +105,21 @@ define([
             highchartsConfig = this._populateData(this.type, model, defaultRenderOptions);
         }
 
-        var highchartsConfig = $.extend(true, highchartsConfig, this.config);
+        highchartsConfig = $.extend(true, highchartsConfig, this.config);
 
         try {
-            this.chart = Highcharts.chart(this.el[0], highchartsConfig);
+
+            var typeExtend = this.type.split("_");
+
+            switch (typeExtend[0]) {
+                case "highstock":
+                    this.chart = this.el.highcharts('StockChart', highchartsConfig);
+
+                    break;
+                default :
+                    this.chart = this.el.highcharts(highchartsConfig);
+
+            }
         }
         catch (er) {
             console.log("error", er, config)
@@ -119,10 +128,40 @@ define([
 
     };
 
-    HC.prototype._populateData = function (type, model, config) {
+    Highcharts.prototype._populateData = function (type, model, config) {
 
-        switch (type.toLowerCase()) {
-            //add type process
+
+        var typeExtend = type.toLowerCase().split("_");
+        switch (typeExtend[0]) {
+
+            case "highstock":
+
+                var seriesOptions = [];
+                for (var i in model.rows) {
+                    var series = model.rows[i].join(" ");
+                    var myData = [];
+                    for (var j in model.cols2) {
+
+                        var month = parseInt(model.cols2[j][0].substring(4, 6)) - 1;
+
+                        /*for(var i in a){for(var j in a[i].data){var b=a[i].data[j];if(b[0]==null)console.log(b)}}*/
+
+                        var myStandartData = new Date(model.cols2[j][0].substring(0, 4), month.toString(), model.cols2[j][0].substring(6, 8));
+
+
+                        myData.push([myStandartData.getTime(), model.data[i][j]])
+                    }
+                    seriesOptions.push(
+                        {name: series, data: myData}
+                    );
+
+
+                }
+                //  console.log("higchart input",seriesOptions)
+                config.series = seriesOptions;
+
+                break
+
             case "heatmap":
                 var count = 0;
                 //console.log("model",model)
@@ -136,21 +175,12 @@ define([
                 for (var i in model.data) {
                     for (var j in model.data[i]) {
 
-                        //if(count<150 /*&& model.data[i][j]*/)
-                        {
-                            count++;
-                            config.series[0].data.push([parseFloat(i), parseFloat(j), model.data[i][j]]);
-                        }
+                        count++;
+                        config.series[0].data.push([parseFloat(i), parseFloat(j), model.data[i][j]]);
+
                     }
                 }
-                /*
-                 config.series[0].data.push([0,0,2]);
-                 config.series[0].data.push(		[0,1,3]	);
 
-                 config.series[0].data.push([1,0,5]);
-                 config.series[0].data.push(		[1,1,4]	);
-                 console.log('et alrs la');
-                 */
                 break;
 
             case "scatter":
@@ -205,30 +235,27 @@ define([
 
                 var tempData = [];
                 for (var i in model.rows) {
-                    //if (i >20) {break;}
                     config.xAxis.categories.push(model.rows[i].join("_"));
-                    // config.xAxis.categories.push("test"+i);
-
                     var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
                     tempData.push(ddata);
-
                 }
-
                 config.series.push({data: tempData});
 
                 break;
             case "donut":
                 var tempData = [];
-                //console.log(model)
                 var innerSize = Math.floor(100 / model.cols2.length);
                 var innerBegin = 0;
-                //console.log("innerSize",innerSize)
+                if (model.cols2.length == 1) {
+                    innerBegin = 30;
+                    innerSize = 70
+                }
                 for (var i in model.cols2) {
-
                     var myData = [];
                     for (var j in model.rows) {
-                        if (model.data[j][i] > 0)
-                            myData.push({name: model.rows[j].join("-"), y: model.data[j][i]})
+                        if (model.data[j][i] > 0) {
+                            myData.push({name: model.rows[j].join("-"), y: model.data[j][i]});
+                        }
                     }
 
                     config.series.push({
@@ -288,8 +315,9 @@ define([
                     };
                     config.drilldown.series.push(drillD)
                 }
-                //console.log("config",config)
                 break;
+
+
             case "pieold":
                 config.chart.type = 'pie'; // temp fix to enable pieold to work
                 for (var ii in model.cols) {
@@ -368,11 +396,10 @@ define([
 
                 break;
 
+
             case "treemap":
-                //console.log("Model",model);
 
                 var model2 = {rows: this.pivotator.toTree(model.rows, 1), cols: this.pivotator.toTree(model.cols2, 1)};
-                //console.log("mod2",model2)
                 config = {
                     series: [{
                         type: 'treemap',
@@ -382,7 +409,8 @@ define([
                         dataLabels: {enabled: false},
                         levelIsConstant: false,
                         levels: [{level: 1, dataLabels: {enabled: true}, borderWidth: 3}],
-                        data: []
+                        data: [],
+                        title: ''
                     }]
                 };
 
@@ -470,94 +498,224 @@ define([
                  ]
                  }]*/
                 break;
+            case "bubblecirclep":
+
+
+                var I = 0;
+                var II = [0, 0, 0, 0];
+                for (var i in model.data) {
+                    var jstatValeur = jStat(model.data[i]).sum();
+//console.log(jstatValeur,i)
+                    if (jstatValeur >= 0) {
+
+                        var layer = 0;
+                        if (I > 15) {
+                            layer = 3
+                        }
+                        else if (I > 7) {
+                            layer = 2
+                        }
+                        else if (I > 0) {
+                            layer = 1
+                        }
+                        I++;
+
+                        config.series[layer].data.push({
+                            y: layer,
+                            x: II[layer] / (layer * layer + 1),
+                            z: jstatValeur,
+                            name: model.rows[i].join("<br>"),
+                            country: model.rows[i].join("<br>"),
+                            drilldown: model.rows[i].join("_")
+                        });
+                        II[layer]++;
+                        var DrillData = [];
+                        for (var j in model.data[i]) {
+                            var realData = model.data[i][j];
+                            if (realData !== null && realData >= 0) {
+                                //console.log("realData",realData)
+                                DrillData.push(
+                                    {
+                                        name: model.cols2[j].join("<br>"),
+                                        country: model.cols2[j].join("<br>"),
+                                        x: parseInt(j),
+                                        y: 1,
+                                        z: realData
+                                    }
+                                )
+                            }
+                        }
+                        config.drilldown.series.push(
+                            {
+                                name: model.cols2[j].join("_"),
+                                id: model.rows[i].join("_"),
+                                data: DrillData
+                            });
+
+                    }
+                }
+                config.tooltip = {
+                    useHTML: true,
+                    headerFormat: '<table>',
+                    pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+                    '<tr><th>{point.x}/{point.y}:</th><td>{point.z}</td></tr>',
+                    footerFormat: '</table>',
+                    followPointer: true
+                };
+
+                break;
+
 
             case "bubblecircle":
 
 
                 var obj = {};
-                var countRow=0;
-                
-                var orderRow=[];
-                for(var i in model.data) {
-                    orderRow.push( (model.data[i][0]?model.data[i][0].toFixed(10):-1) +"_"+i);
-                }
+                var countRow = 0;
 
-                console.log("orderRow",orderRow);
-
-                orderRow.sort(function(a,b) {
-                    return a.split('_')[0] - b.split('_')[0];
-                });
-//console.log("orderRow",orderRow)
-
-                for(var i in orderRow)
-                {
-                    var v=orderRow[i].split("_");
-
-                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
-                        countRow++;
-                }
-
-                var incrementalAngle = 2*Math.PI/countRow;
-
-                var currentAngle=0;
-                for (var i in orderRow)
-                {
-                    var v=orderRow[i].split("_");
-                    var Z = parseFloat(v[0]);
-                    var I=parseInt(v[1]);
-                    if(Z!==null && Z>=0) {
-
-                        var X=Math.cos(currentAngle);
-                        var Y=Math.sin(currentAngle);
-                        obj = {
-                            x: X,
-                            y: Y,
-                            z: Z,                            
-                            name: model.rows[I].join(" " ),
-                            country: model.rows[I].join(" " )
-                        };
-
-                        currentAngle+=incrementalAngle;
-                        
-                        config.series[0].data.push(obj);
+                var orderRow = [];
+                for (var i in model.data) {
+                    var jstatValeur = jStat(model.data[i]).sum();
+                    if (jstatValeur >= 0) {
+                        orderRow.push(jstatValeur/*.toFixed(10)*/ + "_" + i)
                     }
+//						orderRow.push( (jstatValeur>=0?jstatValeur.toFixed(10):-1) +"_"+i);
                 }
-                //console.log('model row: ', obj);
+                orderRow.sort(function (a, b) {
+                    if (b.split('_')[0] < 0) {
+                        return -1
+                    }
+                    return b.split('_')[0] - a.split('_')[0];
+                });
+
+                var incrementalAngle = 2 * Math.PI / (orderRow.length - 1);
+                var currentAngle = 0;
+
+                for (var i in orderRow) {
+                    var v = orderRow[i].split("_");
+                    var Z = parseFloat(v[0]);
+                    var I = parseInt(v[1]);
+                    //console.log("befor I",i,countRow)
+                    //if(i<countRow){
+                    //console.log("creation de I	",v,I)
+
+                    if (i == 0) {
+                        obj = {
+                            x: 0,
+                            y: 0,
+                            z: Z, name: model.rows[I].join("<br>"),
+                            country: model.rows[I].join("<br>"),
+                            drilldown: model.rows[I].join("_")
+                        };
+                    }
+                    else {
+                        obj = {
+                            x: Math.cos(currentAngle),
+                            y: Math.sin(currentAngle),
+                            z: Z, name: model.rows[I].join("<br>"),
+                            country: model.rows[I].join("<br>"),
+                            drilldown: model.rows[I].join("_")
+                        };
+                        currentAngle += incrementalAngle;
+                    }
+
+
+                    config.series[0].data.push(obj);
+                    //}
+
+                    var drillData = [];
+                    var secondCount = 0;
+                    var currentAngle2 = 0;
+                    var orderRow2 = 0;
+                    for (var j in model.data[I]) {
+                        if (model.data[I][j] >= 0) {
+                            orderRow2++;
+                        }
+                    }
+                    var incrementalAngle2 = 2 * Math.PI / (orderRow2);
+                    //console.log("incrementalAngle2",incrementalAngle2)
+
+                    for (var j in model.data[I]) {
+                        //console.log("currentA ngle2",currentAngle2)
+                        if (model.data[I][j] !== null && model.data[I][j] >= 0) {
+
+                            if (secondCount == 0) {
+                                drillData.push({
+                                    name: model.cols2[j].join("<br>"),
+                                    country: model.cols2[j].join("<br>"),
+                                    x: 0,
+                                    y: 0,
+                                    z: model.data[I][j]
+                                });
+                                //console.log(" b ",j);
+                            }
+                            else {
+                                //console.log("currentAngle2",currentAngle2)
+                                drillData.push({
+                                    name: model.cols2[j].join("<br>"),
+                                    country: model.cols2[j].join("<br>"),
+                                    x: Math.cos(currentAngle2),
+                                    y: Math.sin(currentAngle2),
+                                    z: model.data[I][j]
+                                });
+                            }
+                            secondCount++;
+                            currentAngle2 += incrementalAngle2;
+                        }
+
+                    }
+                    config.drilldown.series.push(
+                        {
+                            name: model.cols2[j].join("_"),
+                            id: model.rows[I].join("_"),
+                            data: drillData
+                        });
+                }
+                //console.log("config",config)
+                config.plotOptions = {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        },
+                        bubble: {maxSize: "33%"}
+                    }
+                };
 
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
                     pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
-                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.z}</td></tr>',
+                    '<tr><th>' + ':</th><td>{point.z}</td></tr>',
                     footerFormat: '</table>',
                     followPointer: true
                 };
 
-            break;
-        default:
+                break;
+            default:
 
-            for (var ii in model.cols) {
+                for (var ii in model.cols) {
 
-                if (model.cols.hasOwnProperty(ii)) {
-                    i = model.cols[ii];
-                    config.xAxis.categories.push(i.title[this.lang]);
+                    if (model.cols.hasOwnProperty(ii)) {
+                        i = model.cols[ii];
+                        config.xAxis.categories.push(i.title[this.lang]);
+                    }
                 }
-            }
 
-            for (var i in model.rows) {
+                for (var i in model.rows) {
 
-                //	 console.log("1 ",config.series)
-                config.series.push({name: model.rows[i].join(" "), data: model.data[i]});
-                //	 console.log("2 ",config.series)
+                    //	 console.log("1 ",config.series)
+                    config.series.push({name: model.rows[i].join(" "), data: model.data[i]});
+                    //	 console.log("2 ",config.series)
 
-            }
-    }
-    //	console.log("config",config)
-    return config;
-};
+                }
+        }
+
+        //	console.log("config",config)
+        return config;
+    };
 
 
-    HC.prototype._trigger = function (channel) {
+    Highcharts.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
             return false;
@@ -573,7 +731,7 @@ define([
 
     // end API
 
-    HC.prototype._validateInput = function () {
+    Highcharts.prototype._validateInput = function () {
 
         var valid = true,
             errors = [];
@@ -582,7 +740,7 @@ define([
 
     };
 
-    HC.prototype._initVariables = function () {
+    Highcharts.prototype._initVariables = function () {
 
         //pub/sub
         this.channels = {};
@@ -600,28 +758,27 @@ define([
             }
         });
 
-
     };
 
-    HC.prototype._bindEventListeners = function () {
+    Highcharts.prototype._bindEventListeners = function () {
 
         //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
     };
 
-    HC.prototype._getEventName = function (evt) {
+    Highcharts.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
     };
 
     //disposition
-    HC.prototype._unbindEventListeners = function () {
+    Highcharts.prototype._unbindEventListeners = function () {
 
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
 
     };
 
-    HC.prototype.dispose = function () {
+    Highcharts.prototype.dispose = function () {
 
         //this.chart.dispose(); change in highchart destroy
 
@@ -632,5 +789,5 @@ define([
 
     // utils
 
-    return HC;
+    return Highcharts;
 });
