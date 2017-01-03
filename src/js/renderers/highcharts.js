@@ -17,7 +17,7 @@ define([
     "highcharts-exporting",
     'highcharts-more',
     'highcharts-treemap',
-    "highcharts-no-data-to-display",
+    //"highcharts-no-data-to-display",
     'amplify-pubsub'
 ], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, i18n, Highcharts) {
 
@@ -27,6 +27,7 @@ define([
         log.info("FENIX Highcharts");
         log.info(o);
 
+        require('highcharts-no-data-to-display')(Highcharts);
         $.extend(true, this, C, o);
 
         var valid = this._validateInput();
