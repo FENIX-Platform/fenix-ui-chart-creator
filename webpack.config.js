@@ -24,8 +24,8 @@ module.exports = {
         alias: {
             handlebars: Path.join(__dirname, 'node_modules/handlebars/dist/handlebars.js'),
             jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery'), //needed by eonasdan-bootstrap-datetimepicker
-            canvas2svg: Path.join(__dirname, 'node_modules/jvenn/src/canvas2svg.js'), // needed for jvenn
-            jvenn: Path.join(__dirname, 'node_modules/jvenn/src/jvenn.js')// needed for jvenn
+            //canvas2svg: Path.join(__dirname, 'node_modules/jvenn/src/canvas2svg.js'), // needed for jvenn
+           // jvenn: Path.join(__dirname, 'node_modules/jvenn/src/jvenn.js')// needed for jvenn
         }
     },
 
