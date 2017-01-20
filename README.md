@@ -5,24 +5,22 @@
 #FENIX UI CHART
 
 
+Requirejs import : 
 ```javascript
-    define(['fenix-ui-chart-creator'], function (ChartCreator) {
-    ...
+define(['fenix-ui-chart-creator'], function (ChartCreator) {
+...
 ```
-
-From a  Fenix ressource (FX in this document) and some parameters provided to the initialization function, a pivotator-based creator will perform three mains operations : 
-	-denormalization of the dataset(optional)
+From a  Fenix resource (FX in this document) and some parameters provided to the initialization function, a pivotator-based creator will perform three mains operations : 
+	-denormalisation of the dataset(optional)
 	-aggregation (optional)
-	-rendering of the result with an external library
+	-renderisation of the result with an external library
 
 
 Constructor :
 ```javascript
    this.chart = new ChartCreator(config);
    ```
-
 with config is a json Object with these fields :
-
 <table>
    <tbody>
       <tr>
@@ -134,59 +132,52 @@ with config is a json Object with these fields :
 
 Full example : 
 ```javascript
-var FX = {
-    metadata: {
-        dsd: {
-            columns: [
-                {"id": "country", "title": {"EN": "COUNTRY CODE"}, key: true},
-                {"id": "country_EN", "title": {"EN": "COUNTRIES"}},
-                {"id": "element", "title": {"EN": "elementcode"}, key: true},
-                {"id": "element_EN", "title": {"EN": "element"}},
-                {"id": "item", "title": {"EN": "Item"}, key: true},
-                {"id": "item_EN", "title": {"EN": "item"}},
-                {"id": "year", "title": {"EN": "year"}, key: true, subject: "time"},
-                {"id": "um", "title": {"EN": "um"}, subject: "um"},
-                {"id": "value", "title": {"EN": "value"}, subject: "value", dataType: "number"},
-                {"id": "flag", "title": {"EN": "flag"}, subject: "flag"},
-                {"id": "v1", "title": {"EN": "v1"}, dataType: "number", subject: "value"},
-                {"id": "v1|*v2", "title": {"EN": "v2"}, subject: "flag"}, {
-                    "id": "v3",
-                    "title": {"EN": "v3"}
-                }, {"id": "v4", "title": {"EN": "v4"}}, {"id": "v5", "title": {"EN": "v5"}}
-            ]
-        }
-    },
+var FX={
+  metadata:{
+	dsd:{
+	columns:[
+		{"id" : "country","title" : {"EN" : "COUNTRY CODE"},key:true},
+		{"id" : "country_EN","title" : {"EN" : "COUNTRIES"}},
+		{"id" : "element","title" : { "EN" : "elementcode"},key:true},
+		{"id" : "element_EN","title" : {"EN" : "element"}},
+		{"id" : "item","title" : {"EN" : "Item"},key:true},
+		{"id" : "item_EN","title" : {"EN" : "item"}},
+		{"id" : "year","title" : {"EN" : "year"},key:true,subject:"time"},
+		{"id" : "um","title" : {"EN" : "um"},subject:"um"},
+		{"id" : "value","title" : {"EN" : "value"},subject:"value",dataType:"number"},
+		{"id" : "flag","title" : {"EN" : "flag"},subject:"flag"},
+		{"id" : "v1","title" : {"EN" : "v1"},dataType:"number",subject:"value"},
+		{"id" : "v1|*v2","title" : {"EN" : "v2"},subject:"flag"}	,{"id" : "v3","title" : {"EN" : "v3"}},{"id" : "v4","title" : {"EN" : "v4"}},{"id" : "v5","title" : {"EN" : "v5"}}
+		]
+		}
+		},
+  
+  "data" : [
+  ["4","Algeria","5312","Area_harvested","366","Artichokes","2006","Ha","1713.00","","","003","1","007",""],
+  ["4","Algeria","5312","Area_harvested","366","Artichokes","2007","Ha","1813.00","","","003","1","007",""]]};
 
-    "data": [
-        ["4", "Algeria", "5312", "Area_harvested", "366", "Artichokes", "2006", "Ha", "1713.00", "", "", "003", "1", "007", ""],
-        ["4", "Algeria", "5312", "Area_harvested", "366", "Artichokes", "2007", "Ha", "1813.00", "", "", "003", "1", "007", ""]]
-};
-
-var config = {
-    series: ["country_EN", "element_EN", "item_EN"],
-    x: ["year"],
-    aggregations: ["item_EN"],
-    y: ["value"],
-    aggregationFn: {value: "sum"},
-    formatter: "value",
-    model: FX,
-    el: "#result",
-    type: "line",
-    config : { /* plugin configuration. e.g. highchartsJS configuaraion */}
+var config={
+series :["country_EN","element_EN","item_EN"],
+ x :["year"],
+aggregations:["item_EN"],
+y:["value"],
+aggregationFn:{value:"sum"},
+formatter:"localstring",
+model:FX,
+el:"#result",
+type:"line"
 }
 
 
-this.chart = new ChartCreator(config);
+   this.chart = new ChartCreator(config);
    ```
-
 will create a line chart in the container with the ID=result with country label, element label in row and the year in columns, group by the item: the aggregation function used will be the sum for the columns "value"
 
-# Update
+
+#update
 the update function allow the user to modify the config file and refresh the chart : model,el have don't need to be provided.
-
 example : 
-
 ```javascript
-    this.chart.update({type:"area"})
+this.chart.update({type:"area"})
 
 ```

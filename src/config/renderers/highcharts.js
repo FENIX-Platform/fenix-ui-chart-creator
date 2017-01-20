@@ -7,9 +7,7 @@ define(function () {
     'use strict';
 
     return {
-	
-	
-	"highstock_series":{
+        "highstock_series":{
 
             rangeSelector: {
                 selected: 4
@@ -73,8 +71,8 @@ define(function () {
 
             series: []
         },
-	
- spider: {
+
+        spider: {
             chart: {polar:true,type: 'line'},
             title: {text: ''},
             subtitle: {text: ''},
@@ -90,6 +88,7 @@ define(function () {
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
             series: []
         },
+
         line: {
             chart: {type: 'line'},
             title: {text: ''},
@@ -111,7 +110,7 @@ define(function () {
             title: {text: ''},
             subtitle: {text: ''},
             xAxis: {categories: [], crosshair: true},
-           // yAxis: {min: 0, title: {text: ''}},
+            // yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -127,7 +126,7 @@ define(function () {
             title: {text: ''},
             subtitle: {text: ''},
             xAxis: {categories: [], crosshair: true},
-           // yAxis: {min: 0, title: {text: ''}},
+            // yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -144,7 +143,7 @@ define(function () {
             title: {text: ''},
             subtitle: {text: ''},
             xAxis: {categories: [], crosshair: true},
-          //  yAxis: {min: 0, title: {text: ''}},
+            //  yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -155,8 +154,8 @@ define(function () {
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
             series: []
         },
-		pyramid: 
-      {
+        pyramid:
+        {
             chart: {
                 type: 'bar'
             },
@@ -167,17 +166,17 @@ define(function () {
                 text: ''
             },
             xAxis: [{
-               categories:[],
+                categories:[],
                 reversed: false,
                 labels: {
                     step: 1
                 }
             }, { // mirror axis on right side
 
-               categories:[],              
-			  opposite: true,
+                categories:[],
+                opposite: true,
                 reversed: false,
-              
+
                 linkedTo: 0,
                 labels: {
                     step: 1
@@ -207,8 +206,8 @@ define(function () {
                 }
             },
 
-         	"series":[],
-        
+            "series":[],
+
         },
         area_stacked: {
             chart: {type: 'area'},
@@ -231,14 +230,14 @@ define(function () {
             title: {text: ''},
             subtitle: {text: ''},
             xAxis: {categories: [], crosshair: true},   plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y:.1f}'
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:.1f}'
+                    }
                 }
-            }
-        },
-           //yAxis: {min: 0, title: {text: ''}},
+            },
+            //yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -246,11 +245,11 @@ define(function () {
                 footerFormat: '</table>',
                 useHTML: true
             },
-           // plotOptions: {area: {stacking: 'normal'}},
+            // plotOptions: {area: {stacking: 'normal'}},
             series: [{data:[]	}]
-			,drilldown:{series:[]}
-        }, 
-		donut: {
+            ,drilldown:{series:[]}
+        },
+        donut: {
             chart: {type: 'pie'},
             title: {text: ''},
             subtitle: {text: ''},
@@ -258,11 +257,13 @@ define(function () {
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
-                    dataLabels: {enabled: false},
+                    dataLabels: {
+                        enabled: false
+                    },
                     showInLegend: true
                 }
             },
-           //yAxis: {min: 0, title: {text: ''}},
+            //yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -270,71 +271,71 @@ define(function () {
                 footerFormat: '</table>',
                 useHTML: true
             },
-           // plotOptions: {area: {stacking: 'normal'}},
+            // plotOptions: {area: {stacking: 'normal'}},
             series: []
         },
         scatter: {
-        chart: {
-            type: 'scatter',
-            zoomType: 'xy'
-        },
-       /* title: {
-            text: 'Height Versus Weight of 507 Individuals by Gender'
-        },
-        subtitle: {
-            text: 'Source: Heinz  2003'
-        },
-        xAxis: {
-            title: {
-                enabled: true,
-                text: 'Height (cm)'
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
             },
-            startOnTick: true,
-            endOnTick: true,
-            showLastLabel: true
+            /* title: {
+             text: 'Height Versus Weight of 507 Individuals by Gender'
+             },
+             subtitle: {
+             text: 'Source: Heinz  2003'
+             },
+             xAxis: {
+             title: {
+             enabled: true,
+             text: 'Height (cm)'
+             },
+             startOnTick: true,
+             endOnTick: true,
+             showLastLabel: true
+             },
+             yAxis: {
+             title: {
+             text: 'Weight (kg)'
+             }
+             },
+             legend: {
+             layout: 'vertical',
+             align: 'left',
+             verticalAlign: 'top',
+             x: 100,
+             y: 70,
+             floating: true,
+             backgroundColor:  '#FFFFFF',
+             borderWidth: 1
+             },
+             plotOptions: {
+             scatter: {
+             marker: {
+             radius: 5,
+             states: {
+             hover: {
+             enabled: true,
+             lineColor: 'rgb(100,100,100)'
+             }
+             }
+             },
+             states: {
+             hover: {
+             marker: {
+             enabled: false
+             }
+             }
+             },
+             tooltip: {
+             headerFormat: '<b>{series.name}</b><br>',
+             pointFormat: '{point.x} cm, {point.y} kg'
+             }
+             }
+             },*/
+            series: []
         },
-        yAxis: {
-            title: {
-                text: 'Weight (kg)'
-            }
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 100,
-            y: 70,
-            floating: true,
-            backgroundColor:  '#FFFFFF',
-            borderWidth: 1
-        },
-        plotOptions: {
-            scatter: {
-                marker: {
-                    radius: 5,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.x} cm, {point.y} kg'
-                }
-            }
-        },*/
-        series: []
-    },
-       
+
         heatmap: {
 
             chart: {
@@ -361,7 +362,7 @@ define(function () {
             colorAxis: {
                 min: 0,
                 minColor: '#FFFFFF',
-              //  maxColor: Highcharts.getOptions().colors[0]
+                //  maxColor: Highcharts.getOptions().colors[0]
             },
 
             legend: {
@@ -382,7 +383,7 @@ define(function () {
             series: [{
                 name: '',
                 borderWidth: 1,
-                data: [],
+                data: [/*[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]*/],
                 dataLabels: {
                     enabled: true,
                     color: '#000000'
@@ -391,254 +392,282 @@ define(function () {
 
         },
         treemap: {
-       
-          series: []
-    },
+
+            series: []
+        },
         boxplot: {
 
-        chart: {
-            type: 'boxplot'
-        },
+            chart: {
+                type: 'boxplot'
+            },
 
-        title: {
-            text: ''
-        },
-
-        legend: {
-            enabled: false
-        },
-
-        xAxis: {
-            categories: [/*'1', '2', '3', '4', '5'*/],
             title: {
                 text: ''
-            }
-        },
+            },
 
-        yAxis: {
+            legend: {
+                enabled: false
+            },
+
+            xAxis: {
+                categories: [/*'1', '2', '3', '4', '5'*/],
+                title: {
+                    text: ''
+                }
+            },
+
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+
+            series: []
+
+        },
+        bubble:{
+
+            chart: {
+                type: 'bubble',
+                polar:false,
+                plotBorderWidth: 1,
+                zoomType: 'xy'
+            },
+
+            legend: {
+                enabled: false
+            },
+
             title: {
                 text: ''
-            }
-        },
+            },
 
-        series: []
+            subtitle: {
+                text: ''
+            },
 
-    },
-bubble:{
-
-        chart: {
-            type: 'bubble',polar:false,
-            plotBorderWidth: 1,
-            zoomType: 'xy'
-        },
-
-        legend: {enabled: false},
-
-        title: {text: ''},
-
-        subtitle: {text: ''},
-
-        xAxis: {
-            gridLineWidth: 1,
-            title: {text: ''},
-            labels: {format: '{value} '},
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-                width: 2,
-                value: 65,
-                label: {
-                    rotation: 0,
-                    y: 15,
-                    style: {fontStyle: 'italic'},
+            xAxis: {
+                gridLineWidth: 1,
+                title: {
                     text: ''
                 },
-                zIndex: 3
-            }]
-        },
-
-        yAxis: {
-            startOnTick: false,
-            endOnTick: false,
-            title: {text: ''},
-            labels: {format: '{value}'},
-            maxPadding: 0.2,
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-                width: 2,
-                value: 50,
-                label: {
-                    align: 'right',
-                    style: {fontStyle: 'italic'},
-                    text: '',
-                    x: -10
+                labels: {
+                    format: '{value} '
                 },
-                zIndex: 3
-            }]
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 65,
+                    label: {
+                        rotation: 0,
+                        y: 15,
+                        style: {
+                            fontStyle: 'italic'
+                        },
+                        text: ''
+                    },
+                    zIndex: 3
+                }]
+            },
+
+            yAxis: {
+                startOnTick: false,
+                endOnTick: false,
+                title: {
+                    text: ''
+                },
+                labels: {
+                    format: '{value}'
+                },
+                maxPadding: 0.2,
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 50,
+                    label: {
+                        align: 'right',
+                        style: {fontStyle: 'italic'},
+                        text: '',
+                        x: -10
+                    },
+                    zIndex: 3
+                }]
+            },
+
+
+
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }
+            },
+
+            series: [{data:[]}]
+
         },
-		plotOptions: {series: {dataLabels: {enabled: true,format: '{point.name}'}}},
-        series: [{data:[]}]
-    },
+        bubblecirclepixel:{
 
-bubblecirclepixel:{
+            chart: {
+                backgroundColor: 'white',
+                events: {load:function(){
+                    var myData=this.userOptions.series[0].data;
+                    var ren=this.renderer;
 
- chart: {
-            backgroundColor: 'white',
-            events: {load:function(){
-				var myData=this.userOptions.series[0].data;
-                var ren=this.renderer;
 
-                
 
-for(var i in myData)
-{ ren.circle(myData[i]["x"]*200+500,myData[i]["y"]*100+100,myData[i]["z"]*10).add();}
-              //  ren.circle(0,0,150).add();
+                    for(var i in myData)
+                    { ren.circle(myData[i]["x"]*200+500,myData[i]["y"]*100+100,myData[i]["z"]*10).add();}
+                    //  ren.circle(0,0,150).add();
 
-            }}
+                }}
 
+
+            }
+            ,
+            series: [{data:[]}]
+        },
+        bubblecircleP:{
+
+            chart: {
+                type: 'bubble',
+                polar:true,
+                plotBorderWidth: 1,
+                zoomType: 'xy'
+            },
+
+            legend: {enabled: false},
+
+            title: {text: ''},
+
+            subtitle: {text: ''},
+
+            xAxis: {
+                gridLineWidth: 1,
+                title: {text: ''},
+                labels: {format: '{value} '},
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 65,
+                    label: {
+                        rotation: 0,
+                        y: 15,
+                        style: {fontStyle: 'italic'},
+                        text: ''
+                    },
+                    zIndex: 3
+                }]
+            },
+
+            yAxis: {
+                startOnTick: false,
+                endOnTick: false,
+                title: {text: ''},
+                labels: {format: '{value}'},
+                maxPadding: 0.2,
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 50,
+                    label: {
+                        align: 'right',
+                        style: {fontStyle: 'italic'},
+                        text: '',
+                        x: -10
+                    },
+                    zIndex: 3
+                }]
+            },
+            plotOptions: {series: {dataLabels: {enabled: true,format: '{point.name}'}}},
+            series: [{data:[]},{data:[]},{data:[]},{data:[]}],
+            drilldown:{series:[]}
+        },
+        bubblecircle:{
+
+            chart: {
+                height:400,width:400,
+                type: 'bubble',
+                plotBorderWidth: 1,
+                zoomType: 'xy'
+            },
+
+            legend: {
+                enabled: false
+            },
+
+            title: {text: ''},
+
+            subtitle: {text: ''},
+
+            xAxis: {
+                gridLineWidth: 1,
+                title: {text: ''},
+                labels: {enabled:false,format: ''/*{value} '*/},
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    // width: 2,
+                    // value: 65,
+                    label: {
+                        rotation: 0,
+                        y: 15,
+                        style: {fontStyle: 'italic'},
+                        text: ''
+                    },
+                    zhicharIndex: 3
+                }]
+            },
+
+            yAxis: {
+                startOnTick: false,
+                endOnTick: false,
+                title: {
+                    text: ''
+                },
+                labels: {enabled:false,
+                    format: '{value}'
+                },
+                maxPadding: 0.2,
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 50,
+                    label: {
+                        align: 'right',
+                        style: {fontStyle: 'italic'},
+                        text: '',
+                        x: -10
+                    },
+                    zIndex: 3
+                }]
+            },
+
+
+
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: false,
+                        format: '{point.name}'
+                    }
+                }
+            },
+
+            series: [{
+
+                data:[],
+                sizeBy: 'area'
+            }],
+            drilldown:{series:[]}
 
         }
-    ,
-    series: [{data:[]}]
-    },
-bubblecircleP:{
-
-        chart: {
-            type: 'bubble',
-			polar:true,
-            plotBorderWidth: 1,
-            zoomType: 'xy'
-        },
-
-        legend: {enabled: false},
-
-        title: {text: ''},
-
-        subtitle: {text: ''},
-
-        xAxis: {
-            gridLineWidth: 1,
-            title: {text: ''},
-            labels: {format: '{value} '},
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-                width: 2,
-                value: 65,
-                label: {
-                    rotation: 0,
-                    y: 15,
-                    style: {fontStyle: 'italic'},
-                    text: ''
-                },
-                zIndex: 3
-            }]
-        },
-
-        yAxis: {
-            startOnTick: false,
-            endOnTick: false,
-            title: {text: ''},
-            labels: {format: '{value}'},
-            maxPadding: 0.2,
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-                width: 2,
-                value: 50,
-                label: {
-                    align: 'right',
-                    style: {fontStyle: 'italic'},
-                    text: '',
-                    x: -10
-                },
-                zIndex: 3
-            }]
-        },
-		plotOptions: {series: {dataLabels: {enabled: true,format: '{point.name}'}}},
-        series: [{data:[]},{data:[]},{data:[]},{data:[]}],
-		drilldown:{series:[]}
-    },
-bubblecircle:{
-
-        chart: {
-            height:400,width:400,
-            type: 'bubble',
-            plotBorderWidth: 1,
-            zoomType: 'xy'
-        },
-
-        legend: {
-            enabled: false
-        },
-
-        title: {text: ''},
-
-        subtitle: {text: ''},
-
-        xAxis: {
-            gridLineWidth: 1,
-            title: {text: ''},
-            labels: {enabled:false,format: ''/*{value} '*/},
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-               // width: 2,
-               // value: 65,
-                label: {
-                    rotation: 0,
-                    y: 15,
-                    style: {fontStyle: 'italic'},
-                    text: ''
-                },
-                zhicharIndex: 3
-            }]
-        },
-
-        yAxis: {
-            startOnTick: false,
-            endOnTick: false,
-            title: {
-                text: ''
-            },
-            labels: {enabled:false,
-                format: '{value}'
-            },
-            maxPadding: 0.2,
-            plotLines: [{
-                color: 'black',
-                dashStyle: 'dot',
-                width: 2,
-                value: 50,
-                label: {
-                    align: 'right',
-                    style: {fontStyle: 'italic'},
-                    text: '',
-                    x: -10
-                },
-                zIndex: 3
-            }]
-        },
-
-      
-
-        plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: false,
-                    format: '{point.name}'
-                }
-            }
-        },
-
-        series: [{
-            
-            data:[],
-            sizeBy: 'area'
-        }],
-		drilldown:{series:[]}
-
-    }
     };
 });

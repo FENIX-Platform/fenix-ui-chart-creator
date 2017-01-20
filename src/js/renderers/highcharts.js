@@ -6,35 +6,34 @@ define([
     'jquery',
     'underscore',
     'loglevel',
-    'fx-chart/config/errors',
-    'fx-chart/config/events',
-    'fx-chart/config/config',
-    'fx-common/pivotator/start',
-    'fx-chart/config/renderers/highcharts',
-    'fx-chart/config/renderers/highcharts_shared',
-    'highcharts_more',
-    //'hightchart_treemap',
-    "highcharts_no_data",
-    "highcharts_export",
-    'amplify'
-], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle) {
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
+    'fenix-ui-pivotator',
+    '../../config/renderers/highcharts',
+    '../../config/renderers/highcharts_shared',
+    '../../nls/labels',
+    'highcharts/highstock',
+    "highcharts-exporting",
+    'highcharts-more',
+    'highcharts-treemap',
+    //"highcharts-no-data-to-display",
+    'amplify-pubsub'
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, i18n, Highcharts) {
 
     'use strict';
 
-    function Highcharts(o) {
+    function HC(o) {
         log.info("FENIX Highcharts");
         log.info(o);
 
+        require('highcharts-no-data-to-display')(Highcharts);
         $.extend(true, this, C, o);
 
         var valid = this._validateInput();
-
         if (valid === true) {
-
             this._initVariables();
-
             this._bindEventListeners();
-
             this._renderHighcharts(this.pivotatorConfig);
 
             return this;
@@ -51,7 +50,7 @@ define([
      * pub/sub
      * @return {Object} component instance
      */
-    Highcharts.prototype.on = function (channel, fn, context) {
+    HC.prototype.on = function (channel, fn, context) {
         var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
@@ -64,7 +63,7 @@ define([
      * Force redrawing
      * @return {Object} filter instance
      */
-    Highcharts.prototype.redraw = function () {
+    HC.prototype.redraw = function () {
 
         if (this.chart.length > 0) {
             this.chart.highcharts().reflow();
@@ -74,7 +73,7 @@ define([
 
     };
 
-    Highcharts.prototype.update = function (config) {
+    HC.prototype.update = function (config) {
 
         //TODO add validation
         this.type = config.type ? config.type : this.type;
@@ -82,7 +81,7 @@ define([
         this._renderHighcharts(config);
     };
 
-    Highcharts.prototype._renderHighcharts = function (config) {
+    HC.prototype._renderHighcharts = function (config) {
         var model = this.model;
 
         var chartConfig = templates[this.type];
@@ -109,13 +108,15 @@ define([
 
             switch (typeExtend[0]) {
                 case "highstock":
-                    this.chart = this.el.highcharts('StockChart', highchartsConfig);
+                    this.chart = Highcharts.StockChart(this.el[0], highchartsConfig);
 
                     break;
                 default :
-                    this.chart = this.el.highcharts(highchartsConfig);
+                    this.chart = Highcharts.chart(this.el[0], highchartsConfig);
 
             }
+
+
         }
         catch (er) {
             console.log("error", er, config)
@@ -124,7 +125,7 @@ define([
 
     };
 
-    Highcharts.prototype._populateData = function (type, model, config) {
+    HC.prototype._populateData = function (type, model, config) {
 
 
         var typeExtend = type.toLowerCase().split("_");
@@ -340,6 +341,58 @@ define([
                 }
 
                 break;
+
+            case "treemapold":
+                config = {
+                    series: [{
+                        type: 'treemap',
+                        layoutAlgorithm: 'squarified',
+                        allowDrillToNode: true,
+                        animationLimit: 1000, turboThreshold: 0,
+                        dataLabels: {
+                            enabled: false
+                        },
+                        levelIsConstant: false,
+                        levels: [{
+                            level: 1,
+                            dataLabels: {
+                                enabled: true
+                            },
+                            borderWidth: 3
+                        }],
+                        data: []
+                    }],
+                    title: {
+                        text: ''
+                    }
+                };
+                for (var i in model.rows) {
+                    //if(i<500 )
+                    {
+                        var ii = model.rows[i];
+                        config.series[0].data.push({
+                            name: ii.join(" "),
+                            id: "id_" + i/*,value:jStat(model.data[i]).sum()*/
+                        })
+
+                        for (var j in model.cols2label) {
+                            var jj = model.cols2label[j];
+                            if (model.data[i][j] && model.data[i][j] >= 0)
+                                config.series[0].data.push({
+                                    name: jj.join(" "),
+                                    id: "id_" + i + "_" + j,
+                                    parent: "id_" + i,
+                                    value: model.data[i][j]
+                                })
+                        }
+
+
+                    }
+                }
+                //console.log(config.series);
+
+                break;
+
 
             case "treemap":
 
@@ -659,7 +712,7 @@ define([
     };
 
 
-    Highcharts.prototype._trigger = function (channel) {
+    HC.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
             return false;
@@ -675,7 +728,7 @@ define([
 
     // end API
 
-    Highcharts.prototype._validateInput = function () {
+    HC.prototype._validateInput = function () {
 
         var valid = true,
             errors = [];
@@ -684,34 +737,45 @@ define([
 
     };
 
-    Highcharts.prototype._initVariables = function () {
+    HC.prototype._initVariables = function () {
 
         //pub/sub
         this.channels = {};
 
         this.pivotator = new Pivotator();
 
+        //i18n
+        Highcharts.setOptions({
+            lang: {
+                downloadJPEG: i18n[this.lang.toLowerCase()]['downloadJPEG'],
+                downloadPDF: i18n[this.lang.toLowerCase()]['downloadPDF'],
+                downloadPNG: i18n[this.lang.toLowerCase()]['downloadPNG'],
+                downloadSVG: i18n[this.lang.toLowerCase()]['downloadSVG'],
+                printChart: i18n[this.lang.toLowerCase()]['printChart']
+            }
+        });
+
     };
 
-    Highcharts.prototype._bindEventListeners = function () {
+    HC.prototype._bindEventListeners = function () {
 
         //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
     };
 
-    Highcharts.prototype._getEventName = function (evt) {
+    HC.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
     };
 
     //disposition
-    Highcharts.prototype._unbindEventListeners = function () {
+    HC.prototype._unbindEventListeners = function () {
 
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
 
     };
 
-    Highcharts.prototype.dispose = function () {
+    HC.prototype.dispose = function () {
 
         //this.chart.dispose(); change in highchart destroy
 
@@ -722,5 +786,5 @@ define([
 
     // utils
 
-    return Highcharts;
+    return HC;
 });

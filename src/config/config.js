@@ -6,21 +6,17 @@ define(function () {
 
     'use strict';
 
-    var selectorPath = "fx-chart/renderers/";
-
     return {
 
         renderer: "highcharts",
 
         pluginRegistry: {
             'highcharts': {
-                path: selectorPath + 'highcharts'
+                path: 'highcharts'
             },
             'jvenn': {
-                path: selectorPath + 'jvenn'
+                path: 'jvenn'
             }
         }
-
     }
-
 });
