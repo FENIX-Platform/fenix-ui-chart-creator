@@ -13,6 +13,7 @@
     "w-build:demo": "SET NODE_ENV=demo&& webpack --display-error-details",
     "w-dev": "SET NODE_ENV=develop&& webpack-dev-server --display-error-details --progress --color --content-base dev  --inline --hot"
   },
+
   "repository": {
     "type": "git",
     "url": "https://github.com/FENIX-Platform/fenix-ui-chart-creator.git"
