@@ -14,7 +14,7 @@ define([
     '../../config/renderers/highcharts_shared',
     '../../nls/labels',
     'highcharts/highstock',
-    "highcharts-exporting",
+    //"highcharts-exporting",
     'highcharts-more',
     'highcharts-treemap',
     //"highcharts-no-data-to-display",
@@ -28,6 +28,7 @@ define([
         log.info(o);
 
         require('highcharts-no-data-to-display')(Highcharts);
+        require('highcharts-exporting')(Highcharts);
         $.extend(true, this, C, o);
 
         var valid = this._validateInput();
