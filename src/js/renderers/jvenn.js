@@ -14,7 +14,7 @@ define([
     'canvas2svg',
     'jvenn',
     'amplify-pubsub'
-], function ($, _, log, ERR, EVT, C, Pivotator, templates, canvas2svg, jvenn) {
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, canvas2svg, jvenn, amplify) {
 
     'use strict';
 
@@ -64,7 +64,7 @@ define([
     JVenn.prototype.redraw = function () {
 
         if (this.chart.length > 0){
-           // this.chart.highcharts().reflow();
+            // this.chart.highcharts().reflow();
         } else {
             log.warn("Abort redraw");
         }
@@ -91,6 +91,7 @@ define([
 
         this.chart = this.el.jvenn(this.baseConfig);
 
+        console.log('FFF', 'JVENN READY');
         this._trigger("ready");
 
     };
@@ -110,19 +111,19 @@ define([
         }
 
         for (var k in model.rows) {
-                var data = model.data[k];
-                var processedArry = [];
-                var processedCodeList = [];
+            var data = model.data[k];
+            var processedArry = [];
+            var processedCodeList = [];
 
-                for(var x in data){
-                     if(data[x] != null) {
-                        var codeObj = {};
-                         codeObj.id = model.cols[x].id;
-                         codeObj.title = data[x];
-                         processedArry.push(data[x]);
-                         processedCodeList.push(codeObj);
-                    }
-                 }
+            for(var x in data){
+                if(data[x] != null) {
+                    var codeObj = {};
+                    codeObj.id = model.cols[x].id;
+                    codeObj.title = data[x];
+                    processedArry.push(data[x]);
+                    processedCodeList.push(codeObj);
+                }
+            }
 
             config.series.push({
                 name: model.rows[k].join(" "),
@@ -162,10 +163,8 @@ define([
     };
 
     JVenn.prototype._initVariables = function () {
-
         //pub/sub
         this.channels = {};
-
         this.pivotator = new Pivotator();
 
     };
@@ -177,19 +176,18 @@ define([
         this.config.fnClickCallback = function() {
 
             var obj = {
-             list: this.list,
-             listnames: this.listnames,
-             series:  self.baseConfig.series,
-             selected: this,
-             id:   self.id
+                list: this.list,
+                listnames: this.listnames,
+                series:  self.baseConfig.series,
+                selected: this,
+                id:   self.id
             };
 
-           // console.log(obj)
-            self.controller._trigger('click', obj);
-
+            //console.log('FFF', 'fnClickCallback', obj, self);
+            self.controller._trigger('click.item', obj);
             //amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
 
-          };
+        };
 
     };
 
