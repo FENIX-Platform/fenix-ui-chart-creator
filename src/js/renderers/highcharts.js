@@ -14,7 +14,7 @@ define([
     '../../config/renderers/highcharts_shared',
     '../../nls/labels',
     'highcharts/highstock',
-    //"highcharts-exporting",
+    "highcharts-exporting",
     'highcharts-more',
     'highcharts-treemap',
     //"highcharts-no-data-to-display",
