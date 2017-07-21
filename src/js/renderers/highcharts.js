@@ -14,7 +14,7 @@ define([
     '../../config/renderers/highcharts_shared',
     '../../nls/labels',
     'highcharts/highstock',
-    "highcharts-exporting",
+    // "highcharts-exporting",
     'highcharts-more',
     'highcharts-treemap',
     //"highcharts-no-data-to-display",
@@ -27,8 +27,17 @@ define([
         log.info("FENIX Highcharts");
         log.info(o);
 
-        require('highcharts-no-data-to-display')(Highcharts);
-        require('highcharts-exporting')(Highcharts);
+        // require('highcharts-no-data-to-display')(Highcharts);
+        // require('highcharts-exporting')(Highcharts);
+
+        if (!require.cache[require.resolveWeak("highcharts-no-data-to-display")]) {
+            require('highcharts-no-data-to-display')(Highcharts);
+        }
+
+        if (!require.cache[require.resolveWeak("highcharts-exporting")]) {
+            require('highcharts-exporting')(Highcharts);
+        }
+
         $.extend(true, this, C, o);
 
         var valid = this._validateInput();
