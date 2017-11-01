@@ -76,7 +76,7 @@ define([
     HC.prototype.redraw = function () {
 
         if (this.chart.length > 0) {
-            this.chart.highcharts().reflow();
+            this.chart.reflow();
         } else {
             log.warn("Abort redraw");
         }
