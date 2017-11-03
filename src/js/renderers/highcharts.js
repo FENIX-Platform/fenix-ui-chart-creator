@@ -75,7 +75,7 @@ define([
      */
     HC.prototype.redraw = function () {
 
-        if (this.chart.length > 0) {
+        if (this.chart.hasRendered == true) {
             this.chart.reflow();
         } else {
             log.warn("Abort redraw");
