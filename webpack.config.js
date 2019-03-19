@@ -23,6 +23,7 @@ module.exports = {
         root: Path.resolve(__dirname),
         alias: {
             handlebars: Path.join(__dirname, 'node_modules/handlebars/dist/handlebars.js'),
+            'fenix-ui-chart-creator' : Path.join(__dirname, 'node_modules/fenix-ui-chart-creator/dist/fenix-ui-chart-creator.min.js'),
             jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery'), //needed by eonasdan-bootstrap-datetimepicker
             //canvas2svg: Path.join(__dirname, 'node_modules/jvenn/src/canvas2svg.js'), // needed for jvenn
            // jvenn: Path.join(__dirname, 'node_modules/jvenn/src/jvenn.js')// needed for jvenn

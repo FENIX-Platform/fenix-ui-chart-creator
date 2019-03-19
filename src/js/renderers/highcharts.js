@@ -14,10 +14,9 @@ define([
     '../../config/renderers/highcharts_shared',
     '../../nls/labels',
     'highcharts/highstock',
-    // "highcharts-exporting",
     'highcharts-more',
     'highcharts-treemap',
-    //"highcharts-no-data-to-display",
+    "highcharts-no-data-to-display",
     'amplify-pubsub'
 ], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, i18n, Highcharts) {
 
@@ -26,10 +25,14 @@ define([
     function HC(o) {
         log.info("FENIX Highcharts");
         log.info(o);
+        require('highcharts/modules/exporting')(Highcharts);
+        /*
+        console.log("0")
 
-        // require('highcharts-no-data-to-display')(Highcharts);
-        // require('highcharts-exporting')(Highcharts);
+        require('highcharts-no-data-to-display')(Highcharts);
+        require('highcharts-exporting')(Highcharts);
 
+        console.log("0.5")
         if (!require.cache[require.resolveWeak("highcharts-no-data-to-display")]) {
             require('highcharts-no-data-to-display')(Highcharts);
         }
@@ -37,9 +40,9 @@ define([
         if (!require.cache[require.resolveWeak("highcharts-exporting")]) {
             require('highcharts-exporting')(Highcharts);
         }
-
+        console.log("1")
+        */
         $.extend(true, this, C, o);
-
         var valid = this._validateInput();
         if (valid === true) {
             this._initVariables();
@@ -92,6 +95,9 @@ define([
     };
 
     HC.prototype._renderHighcharts = function (config) {
+
+        log.info("FENIX Highcharts: _renderHighcharts");
+
         var model = this.model;
 
         var chartConfig = templates[this.type];
@@ -748,6 +754,8 @@ define([
     };
 
     HC.prototype._initVariables = function () {
+
+        log.info("FENIX Highcharts: _initVariables");
 
         //pub/sub
         this.channels = {};
