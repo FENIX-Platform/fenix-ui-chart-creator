@@ -19,7 +19,7 @@
   "dependencies": {
     "amplify": "0.0.11",
     "handlebars": "4.0.5",
-    "highcharts": "4.2.5",
+    "highcharts": "8.2.0",
     "highcharts-exporting": "0.1.2",
     "highcharts-more": "0.1.2",
     "highcharts-no-data-to-display": "0.1.2",
